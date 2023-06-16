@@ -1,0 +1,22 @@
+{
+  "name": "bookmanagement",
+  "version": "1.0.0",
+  "description": "This is the book management project and which will solve problem of managing multiple books in library",
+  "main": "index.js",
+  "scripts": {
+    "test": "node src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GauravPandey123webdeveloper/bookManagement.git"
+  },
+  "keywords": [
+    "bookManagement"
+  ],
+  "author": "Gaurav Pandey",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GauravPandey123webdeveloper/bookManagement/issues"
+  },
+  "homepage": "https://github.com/GauravPandey123webdeveloper/bookManagement#readme"
+}
