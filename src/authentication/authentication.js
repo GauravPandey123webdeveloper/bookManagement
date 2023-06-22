@@ -4,7 +4,7 @@ const validation=require('../validators/valid')
 // checking authentication
 const authentication = async function (req, res, next) {
   try {
-    let token = req.headers["x-auth-api"];
+    let token = req.headers["x-api-key"];
     if (!token) {
       res.status(401).send({ status: false, message: "Please log in First " });
     } else {
@@ -12,14 +12,10 @@ const authentication = async function (req, res, next) {
         token,
         "userCreatedToken"
       );
-      if (!decodedToken) {
-        res
-          .status(401)
-          .send({ status: false, message: "verification failded" });
-      } else {
+     
         req.decodedToken = decodedToken;
         next();
-      }
+      
     }
   } catch (err) {
     res.status(401).send({ status: false, message: "Authentication failed" });

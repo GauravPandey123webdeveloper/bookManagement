@@ -1,10 +1,14 @@
 const reviewModel = require("../models/reviewModel")
 const bookModel = require("../models/bookModel")
+const validation=require('../validators/valid')
 const addReview = async function (req, res) {
     try {
         const reviewData = req.body
         const bookId = req.params.bookId
-        const checkBook = await bookModel.findOneAndUpdate({ _id: bookId, isDeleted: false }, { $inc: { reviews: reviews + 1 } }, { new: true, upsert: true }).lean()
+        if(!validation.isValidObjectId(bookId)){
+            return res.status(400).send({status:false,message:"please enter the valid book id"})
+        }
+        const checkBook = await bookModel.findOneAndUpdate({ _id: bookId, isDeleted: false }, { $inc: { reviews: 1} }, { new: true}).lean()
         if (!checkBook) {
             return res.status(404).send({ status: false, message: "book does not found" })
         }
@@ -52,13 +56,14 @@ const deleteReview = async function (req, res) {
     try {
         const bookId = req.params.bookId
         const reviewId = req.params.reviewId
-        const checkBook = await bookModel.findOneAndUpdate({ _id: bookId, isDeleted: false }, { $inc: { reviews: reviews - 1 } }, { new: true, upsert: true }).lean()
-        if (!checkBook) {
-            return res.status(404).send({ status: false, message: "book does not found" })
-        }
-        const reviewData = await reviewModel.findOneAndUpdate({ _id: reviewId, isDeleted: false }, { $set: { isDeleted: true } }, { new: true, upsert: true })
+      
+        const reviewData = await reviewModel.findOneAndUpdate({ _id: reviewId, isDeleted: false }, { $set: { isDeleted: true } }, { new: true })
         if (!reviewData) {
             return res.status(404).send({ status: false, message: "review does not found" })
+        }
+        const checkBook = await bookModel.findOneAndUpdate({ _id: bookId, isDeleted: false }, { $inc: { reviews:- 1 } }, { new: true, upsert: true }).lean()
+        if (!checkBook) {
+            return res.status(404).send({ status: false, message: "book does not found" })
         }
         return res.status(200).send({status:true,message:"deleted successfuly"})
     } catch (error) {

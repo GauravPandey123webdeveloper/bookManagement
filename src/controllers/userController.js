@@ -34,15 +34,16 @@ const registerUser = async function (req, res) {
 }
 const login = async function (req, res) {
   try {
-    const data = req.body
-    const user = await userModel.findOne(data)
+    const {email,password} = req.body
+    
+    const user = await userModel.findOne({email,password})
     if (!user) {
       return res.status(400).send({ status: false, message: "Please Enter correct user name and password" })
     }
-    const token = jwt.sign({ userId: user._id.toString() }, "userCreatedToken", { expiresIn: "1h" })
-    res.setHeader('x-auth-api',token)
-    return res.status(200).send({
-      token, userId: user.id, exp: Math.floor(Date.now() / 1000) + 3600, iat: Math.floor(Date.now() / 1000)
+    const token = jwt.sign({ userId: user._id.toString() }, "userCreatedToken", { expiresIn: "24h" })
+    res.setHeader('x-api-key',token)
+    return res.status(200).send({ status:true, data:{
+      token:token, userId: user.id, exp: Math.floor(Date.now() / 1000) + 24*3600, iat: Math.floor(Date.now() / 1000)}
     });
   } catch (error) {
      return res.status(500).send({status:false, message:error.message})

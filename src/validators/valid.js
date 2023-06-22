@@ -27,6 +27,9 @@ validPassword=function(password){
 }
 // Function to validate a mobile number
 validMobile = function (mob) {
+    if(!mob){
+       return false
+    }
     const trimmedMobile = mob.replace(/\s/g, ''); // Remove spaces from the mobile number
     return /^[0-9]{10}$/.test(trimmedMobile); // Check if the mobile number consists of exactly 10 digits
 };
