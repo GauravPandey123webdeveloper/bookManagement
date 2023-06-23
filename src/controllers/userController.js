@@ -42,7 +42,7 @@ const login = async function (req, res) {
     
     const user = await userModel.findOne({email,password})
     if (!user) {
-      return res.status(400).send({ status: false, message: "Please Enter correct user name and password" })
+      return res.status(401).send({ status: false, message: "Please Enter correct user name and password" })
     }
     const token = jwt.sign({ userId: user._id.toString() }, "userCreatedToken", { expiresIn: "24h" })
     res.setHeader('x-api-key',token)

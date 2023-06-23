@@ -2,6 +2,7 @@ const bookModel = require('../models/bookModel')
 const reviewModel = require('../models/reviewModel')
 const userModel = require("../models/userModel")
 const validation = require('../validators/valid')
+const moment  = require('moment')
 const createBook = async function (req, res) {
     try {
         const data = req.body
@@ -12,8 +13,11 @@ const createBook = async function (req, res) {
         if (!checkUser) {
             return res.status(404).send({ status: false, message: "User does not exist" })
         }
+        if(! moment(data.releasedAt, "YYYY-MM-DD").isValid()){
+            return res.status(400).json({ status: false, message: 'date is invalid' });
+        }
         const book = await bookModel.create(data)
-        return res.status(201).send({ staus: true, message: "success", data: book })
+        return res.status(201).send({ staus: true, data: book })
     } catch (error) {
         if (error.message.includes('validation')) {
             return res.status(400).send({ status: false, message: error.message })
@@ -34,7 +38,7 @@ const getAllBooks = async function (req, res) {
 
         //if user didn't provided any query 
         if (!userId && !category && !subCat) {
-            const bookData = await bookModel.find({ isDeleted: false })
+            const bookData = await bookModel.find({ isDeleted: false }).select({_id:1,title:1,excerpt:1,userId:1,category:1,reviews:1,releasedAt:1})
             if (bookData.length === 0) {
                 return res.status(404).send({ status: false, message: "No books are available." });
             } else {
@@ -74,7 +78,7 @@ const getBook = async function (req, res) {
         const reviews = await reviewModel.find({ bookId: bookId }).select({ _id: 1, bookId: 1, reviewedBy: 1, reviewedAt: 1, rating: 1, review: 1 })
         book.reviewData = reviews
 
-        return res.status(200).send({ status: true, message: "successful", data: book })
+        return res.status(200).send({ status: true, message: "book list", data: book })
     } catch (error) {
         return res.status(500).send({ status: false, message: error.message })
     }
