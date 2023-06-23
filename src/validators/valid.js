@@ -22,6 +22,9 @@ validEmail = function (email) {
 };
 //function to validate password
 validPassword=function(password){
+    if(!password){
+        return false
+    }
     const pass= password.replace(/\s/g, '');
     return /^[^\s]{8,15}$/.test(pass)
 }

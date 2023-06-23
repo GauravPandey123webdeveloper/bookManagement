@@ -6,7 +6,7 @@ const addReview = async function (req, res) {
         const reviewData = req.body
         const bookId = req.params.bookId
         if(!validation.isValidObjectId(bookId)){
-            return res.status(400).send({status:false,message:"please enter the valid book id"})
+            return res.status(404).send({status:false,message:"please enter the valid book id"})
         }
         const checkBook = await bookModel.findOneAndUpdate({ _id: bookId, isDeleted: false }, { $inc: { reviews: 1} }, { new: true}).lean()
         if (!checkBook) {
@@ -32,6 +32,12 @@ const updateReview = async function (req, res) {
         const reviewId = req.params.reviewId
         const bookId = req.params.bookId
         const data = req.body
+        if (!validation.isValidObjectId(bookId)) {
+            return res.status(400).send({ status: false, message: "please enter the valid book id" })
+        }
+        if (!validation.isValidObjectId(reviewId)) {
+            return res.status(400).send({ status: false, message: "please enter the valid review id" })
+        }
         const checkBook = await bookModel.findOne({ _id: bookId, isDeleted: false }).lean()
         if (!checkBook) {
             return res.status(404).send({ status: false, message: "book does not found" })

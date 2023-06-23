@@ -6,7 +6,7 @@ const {createBook, getAllBooks,getBook, updateBook, deleteBook}=require('../cont
 const router= express.Router()
 router.post('/register',registerUser )
 router.post('/login',login)
-router.post('/books',authentication,createBook)
+router.post('/books',createBook)
 router.get('/books',authentication,getAllBooks)
 router.get('/books/:bookId',authentication,getBook)
 router.put('/books/:bookId',authentication,authorisation,updateBook)

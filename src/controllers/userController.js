@@ -4,9 +4,9 @@ const jwt = require('jsonwebtoken')
 const registerUser = async function (req, res) {
   try {
     const { name, phone, email, password } = req.body
-    if (!valid.isValidData(name)) {
-      return res.status(400).send({ status: false, message: "Please Enter a valid name in only lowercase and uppercase letters" })
-    }
+    // if (!valid.isValidData(name)) {
+    //   return res.status(400).send({ status: false, message: "Please Enter a valid name in only lowercase and uppercase letters" })
+    // }
     if (!valid.validMobile(phone)) {
       return res.status(400).send({ status: false, message: "Please Enter a valid mobile number with 10 digits" })
     }
@@ -15,6 +15,10 @@ const registerUser = async function (req, res) {
     }
     if (!valid.validPassword(password)) {
       return res.status(400).send({ status: false, message: "please Enter a valid password with min length 8 and max 15" })
+    }
+    const check = await userModel.findOne({email:email})
+    if(check){
+      return res.status(400).send({status:false, message:"duplicate email"})
     }
     const data = await userModel.create(req.body)
     return res.status(201).send({ status: true, data: data })

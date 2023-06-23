@@ -46,7 +46,7 @@ const getAllBooks = async function (req, res) {
             const filters = {};
             if (userId) {
                 if (!validation.isValidObjectId(userId)) {
-                    return res.status(400).send({ status: false, message: "please enter the valid book id" })
+                    return res.status(404).send({ status: false, message: "please enter the valid user id" })
                 }
             }
             // inserting all the entered data of query param in filter object

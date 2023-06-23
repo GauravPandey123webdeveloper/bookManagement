@@ -26,7 +26,7 @@ const authorisation = async function (req, res, next) {
   try {
     const bookId = req.params.bookId;
     if(!validation.isValidObjectId(bookId)){
-        return res.status(400).send({status:false,message:"please enter the valid book id"})
+        return res.status(401).send({status:false,message:"please enter the valid book id"})
     }
     const uid = await bookModel.findOne({ _id: bookId }).select({ _id: 0, userId: 1 });
     const decId = req.decodedToken.userId;
@@ -37,7 +37,7 @@ const authorisation = async function (req, res, next) {
        return res.status(403).send({status:false,message:"You are not authorised"})
     }
   } catch (err) {
-    res.status(400).send({ status: false, message: "invailid objectId" });
+    res.status(401).send({ status: false, message: "invailid objectId" });
   }
 };
 module.exports = { authentication, authorisation };
