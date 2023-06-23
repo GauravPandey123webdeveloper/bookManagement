@@ -17,7 +17,7 @@ const registerUser = async function (req, res) {
       return res.status(400).send({ status: false, message: "please Enter a valid password with min length 8 and max 15" })
     }
     const data = await userModel.create(req.body)
-    res.status(201).send({ status: true, data: data })
+    return res.status(201).send({ status: true, data: data })
 
   } catch (err) {
     if (err.message.includes('validation')) {
@@ -27,7 +27,7 @@ const registerUser = async function (req, res) {
       return res.status(400).send({ status: false, message: err.message })
     }
     else {
-      return res.status(400).send({ status: false, message: err.message })
+      return res.status(500).send({ status: false, message: err.message })
     }
 
   }

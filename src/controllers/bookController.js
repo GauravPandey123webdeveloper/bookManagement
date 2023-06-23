@@ -115,7 +115,7 @@ const deleteBook = async function (req, res) {
         }
         return res.status(200).send({ status: false, message: "successful", data: deletedBook })
     } catch (error) {
-
+       return res.status(500).send({status:false, message:error.message})
     }
 }
 module.exports = { createBook, getAllBooks, getBook, updateBook, deleteBook }

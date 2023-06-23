@@ -49,8 +49,25 @@ const bookSchema = new mongoose.Schema({
     },
     releasedAt: {
         type: Date,
-        required: [true, 'Please enter the release data'],
-    }
+        required: [true, 'releasedAt is required'],
+        validate: {
+          validator: function (value) {
+            // Check if value is a valid Date object
+            if (!(value instanceof Date && !isNaN(value))) {
+              return false;
+            }
+    
+            // Check if the date format is "YYYY-MM-DD"
+            const year = value.getFullYear().toString();
+            const month = (value.getMonth() + 1).toString().padStart(2, '0');
+            const day = value.getDate().toString().padStart(2, '0');
+            const formattedDate = `${year}-${month}-${day}`;
+    
+            return value.toISOString().split('T')[0] === formattedDate;
+          },
+          message: 'Invalid date format. Date should be in the format "YYYY-MM-DD".',
+        },
+      }
 
 }, { timestamps: true })
 module.exports = mongoose.model('BookCollection', bookSchema)
