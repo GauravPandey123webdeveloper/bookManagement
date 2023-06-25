@@ -59,6 +59,9 @@ const getAllBooks = async function (req, res) {
             if (subCat) filters.subcategory = subCat;
             // return only those books which are not deleted 
             const bookData = await bookModel.find({ $and: [{ isDeleted: false }, filters] })
+            if(!bookData){
+                return res.status(404).send({ status: false, message: "no data is available" })
+            }
             return res.status(200).send({ status: true, data: bookData });
         }
     } catch (err) {
@@ -96,7 +99,7 @@ const updateBook = async function (req, res) {
         if (!updatedBook) {
             return res.status(404).send({ status: false, message: "Please Enter correct bookId" })
         }
-        return res.status(200).send({ status: false, message: "successful", data: updatedBook })
+        return res.status(200).send({ status: true, message: "successful", data: updatedBook })
     } catch (error) {
         if (error.message.includes('validation')) {
             return res.status(400).send({ status: false, message: error.message })

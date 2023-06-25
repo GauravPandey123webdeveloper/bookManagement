@@ -6,7 +6,7 @@ function isValidObjectId(id){
             return true;
         return false;
     }
-    return false;
+    
 }
 // Function to validate if a string is valid data
 isValidData = function (a) {

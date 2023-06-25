@@ -18,7 +18,7 @@ const authentication = async function (req, res, next) {
       
     }
   } catch (err) {
-    res.status(401).send({ status: false, message: "Authentication failed" });
+     return res.status(401).send({ status: false, message: "Authentication failed" });
   }
 };
 // checking the authorisation by authorid
