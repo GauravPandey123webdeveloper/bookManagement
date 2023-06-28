@@ -3,7 +3,24 @@ const reviewModel = require('../models/reviewModel')
 const userModel = require("../models/userModel")
 const validation = require('../validators/valid')
 const moment  = require('moment')
+const {uploadFile}= require('../aws/awsUrl')
+const aws= require('aws-sdk')
+const createUrl= async function(req,res){
+    try{
+    let files= req.files
+    if(files && files.length>0){
+        let uploadedFileURL= await uploadFile( files[0])
+        return res.status(201).send({ staus: true, data:uploadedFileURL })
+    }
+    else{
+       return  res.status(400).send({ msg: "No file found" })
+    }
+}catch(err){
+    return  res.status(500).send({ msg:err.message })
+}
+}
 const createBook = async function (req, res) {
+   
     try {
         const data = req.body
         if (!validation.isValidObjectId(data.userId)) {
@@ -125,4 +142,4 @@ const deleteBook = async function (req, res) {
        return res.status(500).send({status:false, message:error.message})
     }
 }
-module.exports = { createBook, getAllBooks, getBook, updateBook, deleteBook }
+module.exports = { createBook, getAllBooks, getBook, updateBook, deleteBook,createUrl }
